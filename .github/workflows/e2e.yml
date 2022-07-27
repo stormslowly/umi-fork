@@ -65,7 +65,7 @@ jobs:
           record: true
           install-command: pnpm i cypress
         env:
-          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_KEY}}
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_KEY || 'key_placeholder'}}
           PORT: 9527
 
       - name: Run example test-test
