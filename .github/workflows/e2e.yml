@@ -54,7 +54,23 @@ jobs:
       - name: Build targets
         run: pnpm umi-scripts turbo build --filter ./examples/max... --filter ./examples/test-test/...
 
-      - name: example-max-e2e
+      - name: example-max-e2e-without-record
+        if: ${{ !secrets.CYPRESS_KEY }}
+        uses: cypress-io/github-action@v4
+        with:
+          start: pnpm run preview
+          wait-on: 'http://127.0.0.1:9527'
+          browser: chrome
+          working-directory: ./examples/max
+          install: false
+          record: false
+          install-command: pnpm i cypress
+        env:
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_KEY}}
+          PORT: 9527
+
+      - name: example-max-e2e-with-recording
+        if: ${{ secrets.CYPRESS_KEY }}
         uses: cypress-io/github-action@v4
         with:
           start: pnpm run preview
@@ -65,7 +81,7 @@ jobs:
           record: true
           install-command: pnpm i cypress
         env:
-          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_KEY || 'f4466038-70c2-4688-9ed9-106bf013cd73'}}
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_KEY}}
           PORT: 9527
 
       - name: Run example test-test
