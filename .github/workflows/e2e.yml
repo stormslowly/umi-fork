@@ -55,7 +55,7 @@ jobs:
         run: pnpm umi-scripts turbo build --filter ./examples/max... --filter ./examples/test-test/...
 
       - name: example-max-e2e-without-record
-        if: ${{ !secrets.CYPRESS_KEY }}
+        if: ${{ !contains(env.CYPRESS_RECORD_KEY, '8dbe') }}
         uses: cypress-io/github-action@v4
         with:
           start: pnpm run preview
@@ -70,7 +70,7 @@ jobs:
           PORT: 9527
 
       - name: example-max-e2e-with-recording
-        if: ${{ secrets.CYPRESS_KEY }}
+        if: contains(env.CYPRESS_RECORD_KEY, '8dbe')
         uses: cypress-io/github-action@v4
         with:
           start: pnpm run preview
